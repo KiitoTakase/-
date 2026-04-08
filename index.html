@@ -8,21 +8,10 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="hero">
-        <p class="eyebrow">Weather Playing Cards</p>
-        <h1>お天気トランプ</h1>
-        <p class="description">
-          山札を1回タップすると一番上のカードを表示します。2回タップすると、約2秒のシャッフル演出のあとで新しい山札に切り替わります。
-        </p>
-      </section>
+      <div id="interactionZone" class="interaction-zone" role="button" tabindex="0" aria-label="山札を操作する">
+        <div class="tableau" aria-live="polite">
+          <div id="revealedCardSlot" class="revealed-card-slot is-empty"></div>
 
-      <section class="table" aria-label="お天気トランプの表示エリア">
-        <div class="status-strip">
-          <p id="statusMessage" class="status-message">山札は準備OKです。</p>
-          <p id="storageMessage" class="storage-message" hidden></p>
-        </div>
-
-        <div id="interactionZone" class="interaction-zone" role="button" tabindex="0" aria-label="山札を操作する">
           <div class="deck-stage">
             <div id="deck" class="deck" aria-hidden="true">
               <span class="deck-layer layer-4"></span>
@@ -33,7 +22,6 @@
                 <span class="cloud cloud-a"></span>
                 <span class="cloud cloud-b"></span>
                 <span class="cloud cloud-c"></span>
-                <span class="card-back-frame"></span>
               </div>
             </div>
 
@@ -45,16 +33,8 @@
               <span class="burst-card burst-5"></span>
             </div>
           </div>
-
-          <section class="reveal-panel" aria-live="polite">
-            <p class="panel-label">表向きカード</p>
-            <div id="revealedCardSlot" class="revealed-card-slot is-empty">
-              <p class="placeholder">1回タップでここにカードが表示されます</p>
-            </div>
-            <p class="hint">表示後は閉じずに残ります。次は2回タップで再シャッフルします。</p>
-          </section>
         </div>
-      </section>
+      </div>
     </main>
 
     <script type="module" src="./app.js"></script>
