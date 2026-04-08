@@ -1,12 +1,5 @@
 :root {
-  --bg-top: #84d6ff;
-  --bg-mid: #f2fbff;
-  --bg-bottom: #f7f3dc;
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-strong: rgba(255, 255, 255, 0.94);
-  --ink: #12304a;
-  --muted: #52728f;
-  --shadow: 0 18px 50px rgba(17, 55, 84, 0.18);
+  --bg: #ffffff;
   --card-shadow: 0 18px 30px rgba(9, 34, 56, 0.16);
   --back-sky-1: #66b8ff;
   --back-sky-2: #95dcff;
@@ -14,7 +7,6 @@
   --rainy: #2b74c9;
   --sandy: #7a5f3d;
   --hail: #6f50a7;
-  --border: rgba(18, 48, 74, 0.14);
 }
 
 * {
@@ -25,86 +17,24 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-  color: var(--ink);
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
-    radial-gradient(circle at right 15% top 25%, rgba(255, 255, 255, 0.75), transparent 22%),
-    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 62%, var(--bg-bottom) 100%);
+  background: var(--bg);
 }
 
 body {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .app-shell {
-  width: min(100%, 32rem);
+  width: min(100%, 28rem);
   min-height: 100vh;
-  padding: 24px 18px 40px;
-}
-
-.hero {
-  padding: 14px 6px 18px;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #2a6990;
-  font-weight: 700;
-}
-
-.hero h1 {
-  margin: 0;
-  font-size: clamp(2rem, 6vw, 3rem);
-  line-height: 1.05;
-}
-
-.description {
-  margin: 14px 0 0;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
-.table {
-  padding: 18px;
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.92));
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-}
-
-.status-strip {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.status-message,
-.storage-message {
-  margin: 0;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: var(--surface);
-  font-size: 0.92rem;
-  line-height: 1.45;
-}
-
-.storage-message {
-  color: #8a5523;
-  background: rgba(255, 239, 216, 0.95);
+  padding: 24px 16px;
 }
 
 .interaction-zone {
-  display: grid;
-  gap: 20px;
-  border: none;
-  padding: 0;
-  background: transparent;
+  display: block;
+  width: 100%;
   cursor: pointer;
   outline: none;
   user-select: none;
@@ -117,17 +47,23 @@ body {
   box-shadow: 0 0 0 4px rgba(71, 143, 220, 0.3), var(--card-shadow);
 }
 
+.tableau {
+  position: relative;
+  width: min(72vw, 290px);
+  aspect-ratio: 5 / 7;
+  margin: 0 auto;
+}
+
 .deck-stage {
   position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 220px;
-  padding-top: 8px;
+  width: 100%;
+  height: 100%;
 }
 
 .deck {
   position: relative;
-  width: min(58vw, 210px);
+  width: 100%;
+  height: 100%;
   aspect-ratio: 5 / 7;
   transition: transform 260ms ease;
 }
@@ -317,54 +253,30 @@ body {
 }
 
 .reveal-panel {
-  display: grid;
-  gap: 12px;
-}
-
-.panel-label {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #2a6990;
+  display: none;
 }
 
 .revealed-card-slot {
-  position: relative;
-  min-height: 310px;
-  display: grid;
-  place-items: center;
+  position: absolute;
+  inset: 0;
+  display: none;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(218, 240, 249, 0.62), rgba(255, 255, 255, 0.92));
-  border: 1px solid rgba(62, 130, 174, 0.16);
   transition: transform 220ms ease, box-shadow 220ms ease;
+  z-index: 2;
 }
 
 .revealed-card-slot.is-empty {
-  border-style: dashed;
+  display: none;
 }
 
-.placeholder,
-.hint {
-  margin: 0;
-  text-align: center;
-  color: var(--muted);
-}
-
-.placeholder {
-  padding: 0 20px;
-  line-height: 1.7;
-}
-
-.hint {
-  font-size: 0.88rem;
-  line-height: 1.6;
+.revealed-card-slot:not(.is-empty) {
+  display: block;
 }
 
 .playing-card {
   position: relative;
-  width: min(66vw, 250px);
-  aspect-ratio: 5 / 7;
-  inset: auto;
+  width: 100%;
+  height: 100%;
   border-radius: 22px;
   background: linear-gradient(180deg, #ffffff, #fffefd);
   border: 1px solid rgba(17, 53, 83, 0.14);
@@ -429,8 +341,6 @@ body {
 .card-center {
   position: absolute;
   inset: 48px 18px;
-  display: grid;
-  place-items: center;
 }
 
 .card-art {
@@ -562,24 +472,6 @@ body {
 
 @media (min-width: 700px) {
   .app-shell {
-    width: min(100%, 58rem);
-    padding-top: 34px;
-  }
-
-  .table {
-    padding: 22px;
-  }
-
-  .interaction-zone {
-    grid-template-columns: minmax(240px, 280px) minmax(280px, 1fr);
-    align-items: center;
-  }
-
-  .deck-stage {
-    min-height: 100%;
-  }
-
-  .revealed-card-slot {
-    min-height: 360px;
+    width: min(100%, 30rem);
   }
 }
