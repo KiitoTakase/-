@@ -11,88 +11,6 @@ const SUITS = [
 
 const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
-const FACE_COPY = {
-  J: "Jack",
-  Q: "Queen",
-  K: "King",
-};
-
-const PIP_LAYOUTS = {
-  A: [{ x: 50, y: 50, rotate: false }],
-  2: [
-    { x: 50, y: 22, rotate: false },
-    { x: 50, y: 78, rotate: true },
-  ],
-  3: [
-    { x: 50, y: 20, rotate: false },
-    { x: 50, y: 50, rotate: false },
-    { x: 50, y: 80, rotate: true },
-  ],
-  4: [
-    { x: 30, y: 24, rotate: false },
-    { x: 70, y: 24, rotate: false },
-    { x: 30, y: 76, rotate: true },
-    { x: 70, y: 76, rotate: true },
-  ],
-  5: [
-    { x: 30, y: 24, rotate: false },
-    { x: 70, y: 24, rotate: false },
-    { x: 50, y: 50, rotate: false },
-    { x: 30, y: 76, rotate: true },
-    { x: 70, y: 76, rotate: true },
-  ],
-  6: [
-    { x: 30, y: 22, rotate: false },
-    { x: 70, y: 22, rotate: false },
-    { x: 30, y: 50, rotate: false },
-    { x: 70, y: 50, rotate: false },
-    { x: 30, y: 78, rotate: true },
-    { x: 70, y: 78, rotate: true },
-  ],
-  7: [
-    { x: 30, y: 20, rotate: false },
-    { x: 70, y: 20, rotate: false },
-    { x: 50, y: 34, rotate: false },
-    { x: 30, y: 50, rotate: false },
-    { x: 70, y: 50, rotate: false },
-    { x: 30, y: 80, rotate: true },
-    { x: 70, y: 80, rotate: true },
-  ],
-  8: [
-    { x: 30, y: 18, rotate: false },
-    { x: 70, y: 18, rotate: false },
-    { x: 30, y: 38, rotate: false },
-    { x: 70, y: 38, rotate: false },
-    { x: 30, y: 62, rotate: true },
-    { x: 70, y: 62, rotate: true },
-    { x: 30, y: 82, rotate: true },
-    { x: 70, y: 82, rotate: true },
-  ],
-  9: [
-    { x: 30, y: 18, rotate: false },
-    { x: 70, y: 18, rotate: false },
-    { x: 30, y: 36, rotate: false },
-    { x: 70, y: 36, rotate: false },
-    { x: 50, y: 50, rotate: false },
-    { x: 30, y: 64, rotate: true },
-    { x: 70, y: 64, rotate: true },
-    { x: 30, y: 82, rotate: true },
-    { x: 70, y: 82, rotate: true },
-  ],
-  10: [
-    { x: 30, y: 16, rotate: false },
-    { x: 70, y: 16, rotate: false },
-    { x: 30, y: 32, rotate: false },
-    { x: 70, y: 32, rotate: false },
-    { x: 50, y: 44, rotate: false },
-    { x: 50, y: 56, rotate: true },
-    { x: 30, y: 68, rotate: true },
-    { x: 70, y: 68, rotate: true },
-    { x: 30, y: 84, rotate: true },
-    { x: 70, y: 84, rotate: true },
-  ],
-};
-
 const deckSlot = document.getElementById("revealedCardSlot");
 const interactionZone = document.getElementById("interactionZone");
 const statusMessage = document.getElementById("statusMessage");
@@ -257,60 +175,45 @@ function render() {
 }
 
 function buildCardMarkup(card) {
-  const isFaceCard = ["J", "Q", "K"].includes(card.rank);
-  const centerMarkup = isFaceCard ? buildFaceMarkup(card) : buildPipMarkup(card);
+  const displayRank = getDisplayRank(card.rank);
 
   return `
     <article class="playing-card ${card.className}" aria-label="${formatCardName(card)}">
       <div class="card-corner top-left">
-        <span class="corner-rank">${card.rank}</span>
-        <span class="corner-suit">${card.suitSymbol}</span>
+        <span class="corner-rank">${displayRank}</span>
       </div>
       <div class="card-center">
-        ${centerMarkup}
+        <div class="card-art ${card.className}" aria-hidden="true"></div>
       </div>
       <div class="card-corner bottom-right">
-        <span class="corner-rank">${card.rank}</span>
-        <span class="corner-suit">${card.suitSymbol}</span>
+        <span class="corner-rank">${displayRank}</span>
       </div>
     </article>
   `;
 }
 
-function buildPipMarkup(card) {
-  const pips = PIP_LAYOUTS[card.rank]
-    .map(
-      (pip) => `
-        <span
-          class="pip"
-          style="left:${pip.x}%; top:${pip.y}%; ${pip.rotate ? "transform: translate(-50%, -50%) rotate(180deg);" : ""}"
-        >
-          <span class="pip-symbol">${card.suitSymbol}</span>
-          <span class="pip-rank">${card.rank}</span>
-        </span>
-      `,
-    )
-    .join("");
-
-  return `<div class="pip-field">${pips}</div>`;
-}
-
-function buildFaceMarkup(card) {
-  return `
-    <div class="face-center">
-      <div class="face-ornament">${card.suitSymbol}</div>
-      <div class="face-badge">${card.rank}</div>
-      <div class="face-title">
-        <strong>${card.suitLabel}</strong>
-        <span>${FACE_COPY[card.rank]}</span>
-      </div>
-      <div class="face-ornament">${card.suitSymbol}</div>
-    </div>
-  `;
-}
-
 function formatCardName(card) {
   return `${card.suitLabel}の${card.rank}`;
+}
+
+function getDisplayRank(rank) {
+  if (rank === "A") {
+    return "1";
+  }
+
+  if (rank === "J") {
+    return "11";
+  }
+
+  if (rank === "Q") {
+    return "12";
+  }
+
+  if (rank === "K") {
+    return "13";
+  }
+
+  return rank;
 }
 
 function createStorageHandler() {
