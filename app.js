@@ -13,8 +13,6 @@ const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
 const deckSlot = document.getElementById("revealedCardSlot");
 const interactionZone = document.getElementById("interactionZone");
-const statusMessage = document.getElementById("statusMessage");
-const storageMessage = document.getElementById("storageMessage");
 
 let currentDeck = [];
 let currentCard = null;
@@ -31,12 +29,6 @@ function initialize() {
   persistDeck(currentDeck);
   render();
   bindEvents();
-
-  if (!storage.available) {
-    storageMessage.hidden = false;
-    storageMessage.textContent =
-      "localStorageが使えないため、このページを閉じると山札順は保持されません。";
-  }
 }
 
 function bindEvents() {
@@ -75,14 +67,10 @@ function handleTap() {
 
 function handleSingleAction() {
   if (isShuffling || currentCard) {
-    if (currentCard) {
-      statusMessage.textContent = "表示中のカードは固定です。2回タップで新しくシャッフルします。";
-    }
     return;
   }
 
   currentCard = currentDeck[0];
-  statusMessage.textContent = `${formatCardName(currentCard)} を表示しています。2回タップで再シャッフルできます。`;
   render();
 }
 
@@ -94,7 +82,6 @@ function startShuffle() {
   isShuffling = true;
   currentCard = null;
   interactionZone.classList.add("is-shuffling");
-  statusMessage.textContent = "シャッフル中です...";
   render();
 
   window.setTimeout(() => {
@@ -102,7 +89,6 @@ function startShuffle() {
     persistDeck(currentDeck);
     isShuffling = false;
     interactionZone.classList.remove("is-shuffling");
-    statusMessage.textContent = "シャッフルが完了しました。1回タップで一番上のカードを見られます。";
     render();
   }, SHUFFLE_DURATION);
 }
@@ -167,7 +153,7 @@ function render() {
   deckSlot.classList.toggle("is-empty", currentCard === null);
 
   if (!currentCard) {
-    deckSlot.innerHTML = '<p class="placeholder">1回タップでここにカードが表示されます</p>';
+    deckSlot.innerHTML = "";
     return;
   }
 
